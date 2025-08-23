@@ -1,10 +1,13 @@
 package tips.my2cents.myrecipeapp
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
@@ -16,6 +19,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -29,7 +33,7 @@ fun RecipeScreen(modifier: Modifier = Modifier) {
     Box(modifier = Modifier.fillMaxSize()) {
         when {
             viewState.isLoading -> {
-                CircularProgressIndicator(modifier = Modifier.align(Alignment.Center))
+                CircularProgressIndicator(modifier.align(Alignment.Center))
             }
 
             viewState.error != null -> {
@@ -50,9 +54,15 @@ fun RecipeScreen(modifier: Modifier = Modifier) {
 
 @Composable
 fun CategoryScreen(categories: List<Category>) {
-    LazyVerticalGrid(GridCells.Fixed(2), modifier = Modifier.fillMaxSize()) {
-        items(categories) { category ->
-            CategoryItem(category = category)
+    LazyVerticalGrid(
+        columns = GridCells.Fixed(2),
+        modifier = Modifier.fillMaxSize(),
+        contentPadding = PaddingValues(8.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        items(items = categories, key = { it.idCategory }) { cat ->
+            CategoryItem(category = cat)
         }
 
     }
@@ -71,8 +81,9 @@ fun CategoryItem(category: Category) {
             painter = rememberAsyncImagePainter(category.strCategoryThumb),
             contentDescription = null,
             modifier = Modifier
-                .fillMaxSize()
-                .aspectRatio(1f)
+                .fillMaxWidth()
+                .aspectRatio(1f),
+            //contentScale = ContentScale.Crop
         )
 
         Text(
