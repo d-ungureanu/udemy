@@ -12,7 +12,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -71,26 +73,35 @@ fun CategoryScreen(categories: List<Category>) {
 // How each item in the grid should look like
 @Composable
 fun CategoryItem(category: Category) {
-    Column(
+    Surface(
         modifier = Modifier
             .padding(8.dp)
-            .fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .fillMaxWidth(),
+        shadowElevation = 6.dp, // same effect
+        shape = RoundedCornerShape(12.dp)
     ) {
-        Image(
-            painter = rememberAsyncImagePainter(category.strCategoryThumb),
-            contentDescription = null,
+        Column(
             modifier = Modifier
-                .fillMaxWidth()
-                .aspectRatio(1f),
-            //contentScale = ContentScale.Crop
-        )
+                .padding(8.dp)
+                .fillMaxSize(),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Image(
+                painter = rememberAsyncImagePainter(category.strCategoryThumb),
+                contentDescription = null,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .aspectRatio(1f),
+                //contentScale = ContentScale.Crop
+            )
 
-        Text(
-            text = category.strCategory,
-            color = Color.Black,
-            style = TextStyle(fontWeight = FontWeight.Bold),
-            modifier = Modifier.padding(top = 4.dp)
-        )
+            Text(
+                text = category.strCategory,
+                color = Color.Black,
+                style = TextStyle(fontWeight = FontWeight.Bold),
+                modifier = Modifier.padding(top = 4.dp)
+            )
+        }
     }
+
 }
