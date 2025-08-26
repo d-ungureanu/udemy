@@ -34,12 +34,14 @@ fun MyApp(modifier: Modifier) {
     val navController = rememberNavController()
     NavHost(navController = navController, startDestination = "firstScreen") {
         composable(route = "firstScreen") {
-            FirstScreen { name -> navController.navigate("secondScreen/$name") }
+            FirstScreen { name: String, age: Int -> navController.navigate("secondScreen/$name/$age") }
         }
-        composable(route = "secondScreen/{name}") {
+        composable(route = "secondScreen/{name}/{age}") {
             val name = it.arguments?.getString("name") ?: "No Name"
+            val age = it.arguments?.getString("age")?.toIntOrNull() ?: 0
             SecondScreen(
                 name = name,
+                age = age,
                 navigateToFirstScreen = { navController.navigate("firstScreen") }
             )
         }

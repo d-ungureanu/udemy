@@ -20,6 +20,7 @@ import androidx.compose.ui.unit.sp
 @Composable
 fun SecondScreen(
     name: String,
+    age: Int,
     navigateToFirstScreen: () -> Unit
 ) {
 
@@ -32,12 +33,12 @@ fun SecondScreen(
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Text(
-            "This is the second screen,\n${name}.",
+            "This is the second screen.",
             fontSize = 24.sp,
             textAlign = TextAlign.Center
         )
         Text(
-            "Your age is TBD",
+            "Hello $age years old $name",
             fontSize = 24.sp,
             textAlign = TextAlign.Center
         )
