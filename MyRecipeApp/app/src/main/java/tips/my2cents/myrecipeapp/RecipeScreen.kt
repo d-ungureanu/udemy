@@ -1,6 +1,7 @@
 package tips.my2cents.myrecipeapp
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,7 +22,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -29,9 +29,12 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 
 @Composable
-fun RecipeScreen(modifier: Modifier = Modifier) {
+fun RecipeScreen(
+    modifier: Modifier = Modifier,
+    viewState: MainViewModel.RecipeState,
+    navigateToDetail: (Category) -> Unit
+) {
     val recipeViewModel: MainViewModel = viewModel()
-    val viewState by recipeViewModel.categoriesState
     Box(modifier = Modifier.fillMaxSize()) {
         when {
             viewState.isLoading -> {
@@ -47,7 +50,7 @@ fun RecipeScreen(modifier: Modifier = Modifier) {
             }
 
             else -> {
-                CategoryScreen(categories = viewState.list)
+                CategoryScreen(categories = viewState.list, navigateToDetail = navigateToDetail)
             }
         }
     }
@@ -55,7 +58,7 @@ fun RecipeScreen(modifier: Modifier = Modifier) {
 
 
 @Composable
-fun CategoryScreen(categories: List<Category>) {
+fun CategoryScreen(categories: List<Category>, navigateToDetail: (Category) -> Unit) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         modifier = Modifier.fillMaxSize(),
@@ -64,7 +67,7 @@ fun CategoryScreen(categories: List<Category>) {
         verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         items(items = categories, key = { it.idCategory }) { cat ->
-            CategoryItem(category = cat)
+            CategoryItem(category = cat, navigateToDetail)
         }
 
     }
@@ -72,7 +75,10 @@ fun CategoryScreen(categories: List<Category>) {
 
 // How each item in the grid should look like
 @Composable
-fun CategoryItem(category: Category) {
+fun CategoryItem(
+    category: Category,
+    navigateToDetail: (Category) -> Unit = {}
+) {
     Surface(
         modifier = Modifier
             .padding(8.dp)
@@ -83,7 +89,8 @@ fun CategoryItem(category: Category) {
         Column(
             modifier = Modifier
                 .padding(8.dp)
-                .fillMaxSize(),
+                .fillMaxSize()
+                .clickable { navigateToDetail(category) },
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
